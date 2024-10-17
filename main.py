@@ -45,6 +45,9 @@ def initialize_models():
         model_path = "llava-v1.6-vicuna-7b:q4_0"
         model_path_text = "Llama3.2-3B-Instruct:q3_K_M"
 
+        # Context window limit
+        context_window_limit = 2048
+
         # Use the filter_specific_output context manager
         with filter_specific_output():
             # Initialize the image inference model
@@ -53,11 +56,11 @@ def initialize_models():
                 local_path=None,
                 stop_words=[],
                 temperature=0.3,
-                max_new_tokens=3000,
+                max_new_tokens=min(3000, context_window_limit),  # Ensure max tokens fit within the context window
                 top_k=3,
                 top_p=0.2,
                 profiling=False
-                # add n_ctx if out of context window usage: n_ctx=2048
+                # n_ctx parameter can be used if you need to explicitly set the context window
             )
 
             # Initialize the text inference model
@@ -66,13 +69,13 @@ def initialize_models():
                 local_path=None,
                 stop_words=[],
                 temperature=0.5,
-                max_new_tokens=3000,  # Adjust as needed
+                max_new_tokens=min(3000, context_window_limit),  # Ensure max tokens fit within the context window
                 top_k=3,
-                top_p=0.3,
-                profiling=False
-                # add n_ctx if out of context window usage: n_ctx=2048
-
+                top_p=0.9,
+                profiling=False,
+                # Add n_ctx if necessary: n_ctx=2048
             )
+
         print("**----------------------------------------------**")
         print("**       Image inference model initialized      **")
         print("**       Text inference model initialized       **")

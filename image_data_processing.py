@@ -1,12 +1,14 @@
 import re
 import os
 import time
+from nltk import download
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from rich.progress import Progress, TextColumn, BarColumn, TimeElapsedColumn
 from data_processing_common import sanitize_filename  # Import sanitize_filename
 
+download('punkt_tab')
 def get_text_from_generator(generator):
     """Extract text from the generator response."""
     response_text = ""
